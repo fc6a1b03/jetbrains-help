@@ -1,8 +1,7 @@
 services:
   jetbrains-help:
-    build: .
-    image: jetbrains-help:latest
     container_name: Jetbrains-Help
+    image: ghcr.io/fc6a1b03/jetbrains-help:latest
     ports:
       - 10768:10768
     volumes:
