@@ -1,5 +1,10 @@
 # Jetbrains-Help
 
+## `Fork`变更内容
+
+- 调整`Dockerfile`、`docker-compose.yml`
+- 增加`docker-image.yml`，镜像发包至[jetbrains-help](https://github.com/fc6a1b03/jetbrains-help/pkgs/container/jetbrains-help)
+
 ## 目录
 - [项目说明](#项目说明)
   - [仓库简要](#仓库简要)
