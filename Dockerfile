@@ -12,7 +12,7 @@ RUN mvn clean package \
 FROM eclipse-temurin:21-jre as jar_build
 WORKDIR app
 COPY --from=mvn_build /app/target/Jetbrains-Help.jar Jetbrains-Help.jar
-RUN java -Djarmode=layertools -jar super.jar extract
+RUN java -Djarmode=layertools -jar Jetbrains-Help.jar extract
 
 ################################
 
