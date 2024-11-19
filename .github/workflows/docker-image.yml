@@ -1,4 +1,4 @@
-name: GeoCN Docker Image CI
+name: Jetbrains-Help Docker Image CI
 
 on:
   workflow_dispatch:
