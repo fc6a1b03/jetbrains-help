@@ -1,12 +1,30 @@
-FROM maven:3-ibm-semeru-21-jammy as build
-WORKDIR /app
+FROM maven:3-ibm-semeru-21-jammy as mvn_build
+WORKDIR app
 COPY . .
-RUN mvn clean package
+RUN mvn clean package \
+    -DskipTests \
+    -Dmaven.repo.local=/root/.m2/repository \
+    -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=error \
+    -T$(grep -c ^processor /proc/cpuinfo) && \
+    rm -rf target
+
+################################
+
+FROM eclipse-temurin:21-jre as jar_build
+WORKDIR app
+COPY --from=mvn_build /app/target/Jetbrains-Help.jar Jetbrains-Help.jar
+RUN java -Djarmode=layertools -jar super.jar extract && \
+    rm -rf /app/Jetbrains-Help.jar
+
+################################
 
 FROM ibm-semeru-runtimes:open-21-jre
-WORKDIR /app
-COPY --from=build /app/target/Jetbrains-Help.jar Jetbrains-Help.jar
-ENV TZ=Asia/Shanghai
-RUN ln -sf /usr/share/zoneinfo/{TZ} /etc/localtime && echo "{TZ}" > /etc/timezone
+WORKDIR app
+COPY --from=jar_build app/dependencies/ ./
+COPY --from=jar_build app/spring-boot-loader/ ./
+COPY --from=jar_build app/snapshot-dependencies/ ./
+COPY --from=jar_build app/application/ ./
+ENV JVM_OPTS="-Xmx512m -Xms256m" \
+    TZ=Asia/Shanghai
 EXPOSE 10768
-ENTRYPOINT ["java", "-jar", "Jetbrains-Help.jar"]
+ENTRYPOINT ["sh", "-c", "java ${JVM_OPTS} org.springframework.boot.loader.launch.JarLauncher ${0} ${@}"]
