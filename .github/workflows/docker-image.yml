@@ -38,8 +38,10 @@ jobs:
         run: |
           # 获取最新的版本号
           LATEST_VERSION=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r .tag_name)
-          # 构造下载链接
-          DOWNLOAD_URL="https://github.com/docker-slim/docker-slim/releases/download/${LATEST_VERSION}/docker-slim-${LATEST_VERSION#v}-linux-amd64.tar.gz"
+          # 获取下载链接，确保它是 tar.gz 文件
+          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r '.assets[] | select(.name | test("linux-amd64.tar.gz")) | .browser_download_url')
+          # 打印下载链接供调试
+          echo "Download URL: $DOWNLOAD_URL"
           # 下载并安装最新版本的 docker-slim
           curl -sSL $DOWNLOAD_URL | tar -xzv
           sudo mv docker-slim /usr/local/bin/
