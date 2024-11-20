@@ -18,18 +18,41 @@ jobs:
 
       - name: Set registry environment variable
         run: echo "REGISTRY=ghcr.io" >> $GITHUB_ENV
-      
+
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Build and push Docker image
+
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}:latest
+          platforms: linux/amd64,linux/arm64
+
+      - name: Install latest Docker Slim
+        run: |
+          # 获取最新的版本号
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r .tag_name)
+          # 构造下载链接
+          DOWNLOAD_URL="https://github.com/docker-slim/docker-slim/releases/download/${LATEST_VERSION}/docker-slim-${LATEST_VERSION#v}-linux-amd64.tar.gz"
+          # 下载并安装最新版本的 docker-slim
+          curl -sSL $DOWNLOAD_URL | tar -xzv
+          sudo mv docker-slim /usr/local/bin/
+
+      - name: Optimize Docker image with Docker Slim
+        run: |
+          IMAGE_ID=$(docker images --filter "reference=${{ env.REGISTRY }}/${{ github.repository }}:latest" -q)
+          docker-slim build $IMAGE_ID --target ${REGISTRY}/${{ github.repository }}:slim-latest
+
+      - name: Push slimmed Docker image
         uses: docker/build-push-action@v6
         with:
           push: true
           context: .
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}:latest
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}:slim-latest
           platforms: linux/amd64,linux/arm64
