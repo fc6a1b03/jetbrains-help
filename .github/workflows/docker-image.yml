@@ -34,39 +34,39 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ github.repository }}:latest
           platforms: linux/amd64,linux/arm64
 
-      - name: Install latest Docker Slim
-        run: |
-          # 获取最新的版本号
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r .tag_name)
+      # - name: Install latest Docker Slim
+      #   run: |
+      #     # 获取最新的版本号
+      #     LATEST_VERSION=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r .tag_name)
 
-          # 打印完整的 API 响应（调试）
-          echo "API Response: $(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest)"
+      #     # 打印完整的 API 响应（调试）
+      #     echo "API Response: $(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest)"
 
-          # 获取下载链接，确保它是 tar.gz 文件
-          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r '.assets[] | select(.name | test("linux-amd64.tar.gz")) | .browser_download_url')
+      #     # 获取下载链接，确保它是 tar.gz 文件
+      #     DOWNLOAD_URL=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r '.assets[] | select(.name | test("linux-amd64.tar.gz")) | .browser_download_url')
 
-          # 检查下载链接是否有效
-          if [ -z "$DOWNLOAD_URL" ]; then
-            echo "Error: No download URL found for docker-slim tar.gz"
-            exit 1
-          fi
+      #     # 检查下载链接是否有效
+      #     if [ -z "$DOWNLOAD_URL" ]; then
+      #       echo "Error: No download URL found for docker-slim tar.gz"
+      #       exit 1
+      #     fi
 
-          # 打印下载链接供调试
-          echo "Download URL: $DOWNLOAD_URL"
+      #     # 打印下载链接供调试
+      #     echo "Download URL: $DOWNLOAD_URL"
 
-          # 下载并安装最新版本的 docker-slim
-          curl -sSL $DOWNLOAD_URL | tar -xzv
-          sudo mv docker-slim /usr/local/bin/
+      #     # 下载并安装最新版本的 docker-slim
+      #     curl -sSL $DOWNLOAD_URL | tar -xzv
+      #     sudo mv docker-slim /usr/local/bin/
 
-      - name: Optimize Docker image with Docker Slim
-        run: |
-          IMAGE_ID=$(docker images --filter "reference=${{ env.REGISTRY }}/${{ github.repository }}:latest" -q)
-          docker-slim build $IMAGE_ID --target ${REGISTRY}/${{ github.repository }}:slim-latest
+      # - name: Optimize Docker image with Docker Slim
+      #   run: |
+      #     IMAGE_ID=$(docker images --filter "reference=${{ env.REGISTRY }}/${{ github.repository }}:latest" -q)
+      #     docker-slim build $IMAGE_ID --target ${REGISTRY}/${{ github.repository }}:slim-latest
 
-      - name: Push slimmed Docker image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          context: .
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}:slim-latest
-          platforms: linux/amd64,linux/arm64
+      # - name: Push slimmed Docker image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     push: true
+      #     context: .
+      #     tags: ${{ env.REGISTRY }}/${{ github.repository }}:slim-latest
+      #     platforms: linux/amd64,linux/arm64
