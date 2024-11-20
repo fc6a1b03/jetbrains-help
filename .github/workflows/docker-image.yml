@@ -37,7 +37,7 @@ jobs:
       - name: Install Docker Slim
         run: |
           LATEST_VERSION=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r .tag_name)
-          curl -sSL https://github.com/slimtoolkit/slim/releases/download/$LATEST_VERSION/dist_linux_arm64.tar.gz | tar -xzvf -C /usr/local/bin
+          sudo curl -sSL https://github.com/slimtoolkit/slim/releases/download/$LATEST_VERSION/dist_linux_arm64.tar.gz | tar -xzvf -C /usr/local/bin
 
       - name: Slim the Docker image and Push
         env: 
