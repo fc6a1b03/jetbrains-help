@@ -33,16 +33,3 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.repository }}:latest
           platforms: linux/amd64,linux/arm64
-
-      - name: Install Docker Slim
-        run: |
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/docker-slim/docker-slim/releases/latest | jq -r .tag_name)
-          sudo curl -sSL https://github.com/slimtoolkit/slim/releases/download/$LATEST_VERSION/dist_linux_arm64.tar.gz | tar -xzvf -C /usr/local/bin
-
-      - name: Slim the Docker image and Push
-        env: 
-          IMAGE: ${{ env.REGISTRY }}/${{ github.repository }}:latest
-        run: |
-          # docker pull ${{ env.IMAGE }}
-          docker-slim build ${{ env.IMAGE }} --target ${{ env.REGISTRY }}/${{ github.repository }}:slim-latest --platform linux/amd64,linux/arm64 --tag ${{ env.REGISTRY }}/${{ github.repository }}:slim-latest
-          docker push ${{ env.REGISTRY }}/${{ github.repository }}:slim-latest
