@@ -1,6 +1,8 @@
 name: Jetbrains-Help Docker Image CI
-
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -26,7 +28,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker image
+      - name: Build 和 Push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
