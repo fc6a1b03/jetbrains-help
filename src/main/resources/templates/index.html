@@ -77,15 +77,15 @@
      style="position:fixed;top:0;left:0;z-index:998;width:100%;height:100%;display:none;background-color:#000;opacity:0.5;overflow:hidden;"></div>
 <div id="form" style="position:fixed;top:20%;left:40%;width:40%;height:500px;z-index:999;display:none;">
     <div class="form">
-        <div class="title">授权信息</div>
-        <div class="subtitle">欢迎你自定义</div>
         <div class="input-container ic1">
-            <input id="licenseeName" class="input" type="text" placeholder=" "/>
+            <input id="licenseeName" class="input" type="text" placeholder=" "
+                   th:value="${defaults.getDefaultLicenseName()}"/>
             <div class="cut"></div>
             <label for="licenseeName" class="placeholder">许可证名称</label>
         </div>
         <div class="input-container ic2">
-            <input id="assigneeName" class="input" type="text" placeholder=" "/>
+            <input id="assigneeName" class="input" type="text" placeholder=" "
+                   th:value="${defaults.getDefaultAssigneeName()}"/>
             <div class="cut"></div>
             <label for="assigneeName" class="placeholder">许可人名称</label>
         </div>
