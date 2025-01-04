@@ -1,104 +1,86 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
     <title>Jetbrains-Help</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="/css/index.css">
     <link rel="icon" href="https://www.jetbrains.com/favicon.ico?r=1234">
 </head>
 <body>
-<header class="tip sticky flex items-center py-6">
-    <p>
-        🇨🇳 下载 <a href="ja-netfilter" title="Download jetbra first">ja-netfilter.zip</a> , 然后配置
-        你的JetBrains IDE(anything)'s <a onclick="showVmoptins()">IDE.vmoptions</a> 配置文件!<br>
-        🇨🇳 当然你也可以 <a onclick="showLicenseForm()">重新定制激活授权</a> 用以自定义你的激活信息!</br>
-        <strong>🇨🇳 请注意,此页面仅由 <span
-                th:text="${defaults.getDefaultLicenseName()} + '/' + ${defaults.getDefaultAssigneeName()}"></span>
-            个人所有!</strong>
-    </p>
-    <form class="parent">
-        <input type="text" class="search" id="search" placeholder="搜索IDE或者插件">
-    </form>
+
+<header class="bg-white p-4 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between">
+            <div class="flex-1 min-w-0">
+                <p class="text-gray-600">
+                    📌 下载 
+                    <a href="ja-netfilter" title="Download jetbra first" class="text-blue-600 font-semibold hover:underline cursor-pointer">ja-netfilter.zip</a> , 
+                    然后配置你的JetBrains IDE(anything)'s 
+                    <a onclick="showVmoptins()" class="text-blue-600 font-semibold hover:underline cursor-pointer">IDE.vmoptions</a> 配置文件!<br>
+                    📌 当然你也可以 
+                    <a onclick="showLicenseForm()" class="text-blue-600 font-semibold hover:underline cursor-pointer">重新定制激活授权</a> 
+                    用以自定义你的激活信息!<br>
+                    <strong>📌 请注意,此页面仅由 <span th:text="${defaults.getDefaultLicenseName()} + '/' + ${defaults.getDefaultAssigneeName()}"></span> 个人所有!</strong>
+                </p>
+            </div>
+            <div class="flex items-center">
+                <form class="relative max-w-xl mx-auto mt-2">
+                    <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" class="w-full pl-12 pr-4 py-2 text-lg rounded-lg border border-gray-300 focus:border-blue-500 focus:shadow-outline" id="search" placeholder="搜索IDE或者插件">
+                </form>
+            </div>
+        </div>
+    </div>
 </header>
-<main id="product-list" class="px-6 z-grid py-10" style="--space: 20rem; --gutter: 3.5rem">
+
+<main id="product-list" class="flex flex-wrap max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <th:block th:fragment="product-list">
         <th:block th:each="product:${products}">
-            <article class="card" th:data-product="${product.getName()}"
-                     th:data-product-codes="${product.getProductCode()}">
-                <header>
-                    <div class="flex items-center justify-between px-6 pt-1 pb-0 bg-card radius-1">
-                        <div class="avatar-wrapper flex items-center justify-center overflow-hidden shrink-0">
-                            <div class="icon" th:classappend="${product.getIconClass()}" role="img"></div>
-                        </div>
+            <article class="product-card w-64 p-4 sm:w-1/2 md:w-1/3 lg:w-1/4 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer shadow-md hover:shadow-lg" th:data-product="${product.getName()}" th:data-product-codes="${product.getProductCode()}" onclick="copyLicense(this)">
+                <div class="p-6 bg-white rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="icon w-12 h-12 mr-4 bg-center bg-no-repeat bg-cover rounded-full flex-shrink-0" th:classappend="${product.getIconClass()}"></div>
+                        <h1 class="text-lg text-clamp font-bold flex-grow" th:text="${product.getName()}"></h1>
                     </div>
-                    <hr/>
-                </header>
-                <div class="pd-6 overflow-hidden bg-card container radius-1">
-                    <h1 class="truncate truncate-1 color-primary mt-0 overflow-ellipsis" th:title="${product.getName()}"
-                        th:text="${product.getName()}"></h1>
-                    <p title="复制到剪贴板" class="truncate text-sm text-grey" onclick="copyLicense(this)"
-                       data-content="复制到剪贴板">
-                        *********************************************************************************************************************************************************
-                    </p>
+                    <p title="复制到剪贴板" class="text-clamp text-sm text-gray-500 cursor-pointer">*******************************************</p>
                 </div>
-                <div class="mask"></div>
-                <div class="mask mask-c-1"></div>
             </article>
         </th:block>
         <th:block th:each="plugin:${plugins}">
-            <article class="card" th:data-product="${plugin.getName()}"
-                     th:data-product-codes="${plugin.getProductCode()}">
-                <header>
-                    <div class="flex items-center justify-between px-6 pt-1 pb-0 bg-card radius-1">
-                        <div class="avatar-wrapper flex items-center justify-center overflow-hidden shrink-0">
-                            <div class="icon" role="img"
-                                 th:style="'background-image: url(' + ${plugin.getIcon()} + ')'"></div>
-                        </div>
+            <article class="product-card w-64 p-4 sm:w-1/2 md:w-1/3 lg:w-1/4 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer shadow-md hover:shadow-lg" th:data-product="${plugin.getName()}" th:data-product-codes="${plugin.getProductCode()}" onclick="copyLicense(this)">
+                <div class="p-6 bg-white rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <img th:src="${plugin.getIcon()}" class="w-12 h-12 rounded-full object-cover mr-4" />
+                        <h1 class="text-lg text-clamp font-bold" th:text="${plugin.getName()}"></h1>
                     </div>
-                    <hr/>
-                </header>
-                <div class="pd-6 overflow-hidden bg-card container radius-1">
-                    <h1 class="truncate truncate-1 color-primary mt-0 overflow-ellipsis" th:title="${plugin.getName()}"
-                        th:text="${plugin.getName()}"></h1>
-                    <p title="复制到剪贴板" class="truncate text-sm text-grey" onclick="copyLicense(this)"
-                       data-content="复制到剪贴板">
-                        *********************************************************************************************************************************************************
-                    </p>
+                    <p title="复制到剪贴板" class="text-clamp text-sm text-gray-500 cursor-pointer">*******************************************</p>
                 </div>
-                <div class="mask"></div>
-                <div class="mask mask-c-1"></div>
             </article>
         </th:block>
     </th:block>
 </main>
-<div id="mask"
-     style="position:fixed;top:0;left:0;z-index:998;width:100%;height:100%;display:none;background-color:#000;opacity:0.5;overflow:hidden;"></div>
-<div id="form" style="position:fixed;top:20%;left:40%;width:40%;height:500px;z-index:999;display:none;">
-    <div class="form">
-        <div class="input-container ic1">
-            <input id="licenseeName" class="input" type="text" placeholder=" "
-                   th:value="${defaults.getDefaultLicenseName()}"/>
-            <div class="cut"></div>
-            <label for="licenseeName" class="placeholder">许可证名称</label>
-        </div>
-        <div class="input-container ic2">
-            <input id="assigneeName" class="input" type="text" placeholder=" "
-                   th:value="${defaults.getDefaultAssigneeName()}"/>
-            <div class="cut"></div>
-            <label for="assigneeName" class="placeholder">许可人名称</label>
-        </div>
-        <div class="input-container ic2">
-            <input id="expiryDate" class="input" type="text" placeholder=""
-                   th:value="${defaults.getDefaultExpiryDate()}"/>
-            <div class="cut cut-short"></div>
-            <label for="expiryDate" class="placeholder">过期时间</label>
-        </div>
-        <button class="submit" onclick="submitLicenseInfo(this)">确认</button>
+
+<div id="mask" style="display:none;" class="fixed top-0 left-0 w-full h-full bg-black opacity-50"></div>
+<div id="form" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);" class="bg-white p-8 rounded-lg shadow-md">
+    <div class="mb-4">
+        <label for="licenseeName" class="block text-sm font-medium text-gray-700">许可证名称</label>
+        <input id="licenseeName" type="text" class="mt-1 p-2 w-full border rounded-lg focus:border-blue-500" placeholder="许可证名称" th:value="${defaults.getDefaultLicenseName()}"/>
     </div>
+    <div class="mb-4">
+        <label for="assigneeName" class="block text-sm font-medium text-gray-700">许可人名称</label>
+        <input id="assigneeName" type="text" class="mt-1 p-2 w-full border rounded-lg focus:border-blue-500" placeholder="许可人名称" th:value="${defaults.getDefaultAssigneeName()}"/>
+    </div>
+    <div class="mb-4">
+        <label for="expiryDate" class="block text-sm font-medium text-gray-700">过期时间</label>
+        <input id="expiryDate" type="text" class="mt-1 p-2 w-full border rounded-lg focus:border-blue-500" placeholder="过期时间" th:value="${defaults.getDefaultExpiryDate()}"/>
+    </div>
+    <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onclick="submitLicenseInfo(this)">确认</button>
 </div>
-</body>
+
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/index.js"></script>
+</body>
 </html>
