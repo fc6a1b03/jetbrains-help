@@ -1,7 +1,7 @@
 FROM maven:3-ibm-semeru-21-jammy as mvn_build
 WORKDIR app
 COPY . .
-RUN mvn clean package \
+RUN mvn clean package -q \
     -DskipTests \
     -Dmaven.repo.local=/root/.m2/repository \
     -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=error \
