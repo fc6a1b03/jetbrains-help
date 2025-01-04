@@ -15,11 +15,6 @@
     "iconClass": "icon-ps"
   },
   {
-    "name": "AppCode",
-    "productCode": "AC,PCWMP,PSI",
-    "iconClass": "icon-ac"
-  },
-  {
     "name": "DataGrip",
     "productCode": "DB,PSI,PDB",
     "iconClass": "icon-db"
