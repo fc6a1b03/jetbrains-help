@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Jetbrains-Help</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="icon" href="https://www.jetbrains.com/favicon.ico?r=1234">
 </head>
 <body>
@@ -17,9 +17,9 @@
                     📌 下载 
                     <a href="ja-netfilter" title="Download jetbra first" class="text-blue-600 font-semibold hover:underline cursor-pointer">ja-netfilter.zip</a> , 
                     然后配置你的JetBrains IDE(anything)'s 
-                    <a onclick="showVmoptins()" class="text-blue-600 font-semibold hover:underline cursor-pointer">IDE.vmoptions</a> 配置文件!<br>
+                    <a id="show-vmoptions-link" class="text-blue-600 font-semibold hover:underline cursor-pointer">IDE.vmoptions</a> 配置文件!<br>
                     📌 当然你也可以 
-                    <a onclick="showLicenseForm()" class="text-blue-600 font-semibold hover:underline cursor-pointer">重新定制激活授权</a> 
+                    <a id="show-license-form-link" class="text-blue-600 font-semibold hover:underline cursor-pointer">重新定制激活授权</a> 
                     用以自定义你的激活信息!<br>
                     <strong>📌 请注意,此页面仅由 <span th:text="${defaults.getDefaultLicenseName()} + '/' + ${defaults.getDefaultAssigneeName()}"></span> 个人所有!</strong>
                 </p>
@@ -39,7 +39,7 @@
 <main id="product-list" class="flex flex-wrap max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <th:block th:fragment="product-list">
         <th:block th:each="product:${products}">
-            <article class="product-card w-64 p-4 sm:w-1/2 md:w-1/3 lg:w-1/4 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer shadow-md hover:shadow-lg" th:data-product="${product.getName()}" th:data-product-codes="${product.getProductCode()}" onclick="copyLicense(this)">
+            <article class="product-card w-64 p-4 sm:w-1/2 md:w-1/3 lg:w-1/4 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer shadow-md hover:shadow-lg" th:data-product="${product.getName()}" th:data-product-codes="${product.getProductCode()}">
                 <div class="p-6 bg-white rounded-lg">
                     <div class="flex items-center mb-4">
                         <div class="icon w-12 h-12 mr-4 bg-center bg-no-repeat bg-cover rounded-full flex-shrink-0" th:classappend="${product.getIconClass()}"></div>
@@ -50,7 +50,7 @@
             </article>
         </th:block>
         <th:block th:each="plugin:${plugins}">
-            <article class="product-card w-64 p-4 sm:w-1/2 md:w-1/3 lg:w-1/4 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer shadow-md hover:shadow-lg" th:data-product="${plugin.getName()}" th:data-product-codes="${plugin.getProductCode()}" onclick="copyLicense(this)">
+            <article class="product-card w-64 p-4 sm:w-1/2 md:w-1/3 lg:w-1/4 transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer shadow-md hover:shadow-lg" th:data-product="${plugin.getName()}" th:data-product-codes="${plugin.getProductCode()}">
                 <div class="p-6 bg-white rounded-lg">
                     <div class="flex items-center mb-4">
                         <img th:src="${plugin.getIcon()}" class="w-12 h-12 rounded-full object-cover mr-4" />
@@ -77,10 +77,9 @@
         <label for="expiryDate" class="block text-sm font-medium text-gray-700">过期时间</label>
         <input id="expiryDate" type="text" class="mt-1 p-2 w-full border rounded-lg focus:border-blue-500" placeholder="过期时间" th:value="${defaults.getDefaultExpiryDate()}"/>
     </div>
-    <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onclick="submitLicenseInfo(this)">确认</button>
+    <button id="submit-license-info" class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">确认</button>
 </div>
 
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
